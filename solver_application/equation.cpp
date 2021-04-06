@@ -18,8 +18,8 @@ int main()
     {
         solve(a, b, c, x1, x2);
 
-        formatter(std::cout, "x1 = 0");
-        formatter(std::cout, "x2 = 0");
+        formatter(std::cout, std::string("x1 = 0"));
+        formatter(std::cout, std::string("x2 = 0"));
     }
     catch (const std::logic_error& ex)
     {
