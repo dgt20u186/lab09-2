@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/morsiiik/lab04.svg?branch=master)](https://travis-ci.org/morsiiik/lab04)
 <фрагмент_вставки_значка>
 ## Laboratory work III
 
