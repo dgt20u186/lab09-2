@@ -1,4 +1,0 @@
-/home/mors/morsiiik/workspace/projects/lab03/_install/lib/libprint.a
-/home/mors/morsiiik/workspace/projects/lab03/_install/include/print.hpp
-/home/mors/morsiiik/workspace/projects/lab03/_install/cmake/print-config.cmake
-/home/mors/morsiiik/workspace/projects/lab03/_install/cmake/print-config-noconfig.cmake
