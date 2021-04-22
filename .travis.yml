@@ -1,14 +1,9 @@
 language: cpp
 
-jobs:
-  include:
-  - name: "all projects"
-    script:
-    - cmake -H. -B_build
-    - cmake --build _build
-  - name: "each CMakeLists.txt"
-    script:
-    - source ./script
+script:
+- cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install
+- cmake --build _build
+- cmake --build _build --target install
 
 addons:
   apt:
