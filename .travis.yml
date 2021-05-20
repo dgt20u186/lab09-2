@@ -1,13 +1,10 @@
 language: cpp
-jobs:
-  include:
-  - name: "all projects"
-    script:
-    - rm -rf _build _install
-    - cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install -DBUILD_TESTS=ON
-    - cmake --build _build
-    - cmake --build _build --target install
-    - cmake --build _build --target test -- ARGS=--verbose
+
+script:
+- rm -rf _build _install
+- cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install
+- cmake --build _build
+- cmake --build _build --target install
 
 addons:
   apt:
