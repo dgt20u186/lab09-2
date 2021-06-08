@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/morsiiik/lab07.svg?branch=tutorial)](https://travis-ci.org/morsiiik/lab07)
+[![Build Status](https://travis-ci.org/morsiiik/lab08.svg?branch=tutorial)](https://travis-ci.org/morsiiik/lab08)
 
 ## Laboratory work VII
 
@@ -11,7 +11,7 @@ $ open https://github.com/ruslo/hunter
 
 ## Tasks
 
-- [x] 1. Создать публичный репозиторий с названием **lab07** на сервисе **GitHub**
+- [x] 1. Создать публичный репозиторий с названием **lab08** на сервисе **GitHub**
 - [x] 2. Выполнить инструкцию учебного материала
 - [x] 3. Ознакомиться со ссылками учебного материала
 - [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
@@ -30,10 +30,10 @@ $ source scripts/activate
 ```
 
 ```sh
-$ git clone https://github.com/${GITHUB_USERNAME}/lab06 projects/lab07   #клонируем репозиторий из lab06 в директорию projects/lab07
-$ cd projects/lab07                                                     #переходим директорию projects/lab05
+$ git clone https://github.com/${GITHUB_USERNAME}/lab06 projects/lab08   #клонируем репозиторий из lab06 в директорию projects/lab08
+$ cd projects/lab08                                                     #переходим директорию projects/lab05
 $ git remote remove origin                                             #отключаемся от гита
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab07   #подключаемся к новому репозиторию
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab08   #подключаемся к новому репозиторию
 ```
 
 ```sh
