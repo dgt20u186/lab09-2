@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/morsiiik/lab09.svg?branch=tutorial)](https://travis-ci.org/morsiiik/lab09)
+
 ```sh
 $ export GITHUB_TOKEN=
 $ export GITHUB_USERNAME=
