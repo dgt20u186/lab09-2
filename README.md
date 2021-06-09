@@ -1,160 +1,136 @@
-[![Build Status](https://travis-ci.org/morsiiik/lab08.svg?branch=tutorial)](https://travis-ci.org/morsiiik/lab08)
-
-# Laboratory work VIII
-
-Данная лабораторная работа посвещена изучению систем автоматизации развёртывания и управления приложениями на примере **Docker**
+```sh
+$ export GITHUB_TOKEN=
+$ export GITHUB_USERNAME=
+$ export PACKAGE_MANAGER=apt
+$ export GPG_PACKAGE_NAME=gpg
+```
 
 ```sh
-$ open https://docs.docker.com/get-started/
+$ $PACKAGE_MANAGER install xclip #Устанавливаем утилиту xclip, предоставляющую доступ к буферу обмена Х из коммандной строки
+$ alias gsed=sed
+$ alias pbcopy='xclip -selection clipboard'
+$ alias pbpaste='xclip -selection clipboard -o'
 ```
-
-## Tasks
-
-- [x] 1. Создать публичный репозиторий с названием **lab08** на сервисе **GitHub**
-- [x] 2. Ознакомиться со ссылками учебного материала
-- [x] 3. Выполнить инструкцию учебного материала
-- [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
-
-## Tutorial
-
 
 ```sh
-$ export GITHUB_USERNAME=<имя_пользователя> 
-```
-
-```
+# Скачивание и установка пакета Go, для работы с релизами Github
 $ cd ${GITHUB_USERNAME}/workspace
-$ pushd .
+$ pushd . 
 $ source scripts/activate
+$ go get github.com/aktau/github-release
 ```
 
 ```sh
-$ git clone https://github.com/${GITHUB_USERNAME}/lab07 lab08
-$ cd lab08
-$ git submodule update --init
+$ git clone https://github.com/${GITHUB_USERNAME}/lab09 projects/lab09
+$ cd projects/lab09
 $ git remote remove origin
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab08
-```
-4.  В файле Dockerfile указываем операционную систему и версию
-
-```sh
-$ cat > Dockerfile <<EOF
-FROM ubuntu:18.04
-EOF
-```
-5. задаем докеру что делать при запуске ВМ (обновления системы и установка пакетов)
-
-```sh
-$ cat >> Dockerfile <<EOF
-RUN apt update
-RUN apt install -yy gcc g++ cmake
-EOF
-```
-6. Задаем текущий каталог
-```sh
-$ cat >> Dockerfile <<EOF
-COPY . print/
-WORKDIR print
-EOF
-```
-7. собираем смэйк
-
-```sh
-$ cat >> Dockerfile <<EOF
-RUN cmake -H. -B_build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=_install
-RUN cmake --build _build
-RUN cmake --build _build --target install
-EOF
-```
-8. env = export 
-
-```sh
-$ cat >> Dockerfile <<EOF
-ENV LOG_PATH /home/logs/log.txt
-EOF
-```
-9. создаем доп.каталог для logs
-```sh
-$ cat >> Dockerfile <<EOF
-VOLUME /home/logs
-EOF
-```
-10. создаем WORKDIR
-```sh
-$ cat >> Dockerfile <<EOF
-WORKDIR _install/bin
-EOF
-```
-11. эта команда вызывает утилиту demo, что была создана в предыдущих лабораторных. 
-
-```sh
-$ cat >> Dockerfile <<EOF
-ENTRYPOINT ./demo
-EOF
-```
-Кратко о сделанном: мы создали весь файл, который явл. скриптом в своем собственном формате. Можем вызывать саму утилиту докер, которая будет создавать машину, которая будет "для нас" работать.
-12. вызываем утилиту docker. -t это тег. тег - logger
-```sh
-$ docker build -t logger .
-```
-13. позволяет вывести (просмотреть) список, тех  ВМ, что есть
-
-```sh
-$ docker images
-```
-14.  Мы находимся сейчас в раб папке,где мы можем вызывать докер. Мы хотим развернуть ВМ и для этого мы 
-создаем logs. Затем: делаем docker run - запуск машины, -it - подключаем к машине терминал. после этого нужно подключить каталог, что мы создали внутрь машины. Испольузем -v для этого. logger - это имя машины, которую мы назвали в докер билт.
-  Должна быть выведена работа утилиты demo. Все, что проспиано в качестве команд будет выведено на экран.
-
-
-```sh 
-$ mkdir logs
-$ docker run -it -v "$(pwd)/logs/:/home/logs/" logger
-text1
-text2
-text3
-<C-D>
-```
-15. docker inspect logger - показывает, что происходит с машиной
-
-```sh
-$ docker inspect logger
-```
-16. cat logs/log.txt позволяет посмотреть, что утилита вывела в лог
-```sh
-$ cat logs/log.txt
-```
-17. Заменяем README.md 
-```sh
-$ gsed -i 's/lab07/lab08/g' README.md
-```
-18. Редактируем тревис для запуска докера
-```sh
-$ vim .travis.yml
-/lang<CR>o
-services:
-- docker<ESC> //  сама клавиша
-jVGdo
-script:
-- docker build -t logger .<ESC>
-:wq
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab09
 ```
 
 ```sh
-$ git add Dockerfile
-$ git add .travis.yml
-$ git commit -m"adding Dockerfile"
-$ git push origin master
+$ gsed -i 's/lab08/lab09/g' README.md
 ```
-19. Нужно сделать Docker работающим внутри travis'а. Выполянем это.
+
+Устанавливаем GPG (утилиту для шифрования) и создаем новый секретный ключ
 ```sh
-$ travis login --auto
+$ $PACKAGE_MANAGER install ${GPG_PACKAGE_NAME}
+$ gpg --list-secret-keys --keyid-format LONG
+$ gpg --full-generate-key
+#Вводим секретный ключ
+$ gpg --list-secret-keys --keyid-format LONG
+$ gpg -K ${GITHUB_USERNAME}
+# Сохраняем перменную с публичным ключом
+$ GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep ssb | tail -1 | awk '{print $2}' | awk -F'/' '{print $2}')
+# Сохраняем переменную с секретным ключом
+$ GPG_SEC_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | tail -1 | awk '{print $2}' | awk -F'/' '{print $2}')
+# Выводим ключ в ASCII и копируем его в буфер обмена
+$ gpg --armor --export ${GPG_KEY_ID} | pbcopy
+$ pbpaste
+# Вводим ключ в гитхабе
+$ open https://github.com/settings/keys
+$ git config user.signingkey ${GPG_SEC_KEY_ID}
+$ git config gpg.program gpg
+```
+
+```sh
+# Настраиваем скрипт для добавления сообщения к тегу
+$ test -r ~/.bash_profile && echo 'export GPG_TTY=$(tty)' >> ~/.bash_profile
+$ echo 'export GPG_TTY=$(tty)' >> ~/.profile
+```
+
+```sh
+$ cmake -H. -B_build -DCPACK_GENERATOR="TGZ"
+$ cmake --build _build --target package
+```
+
+```sh
+$ travis login --github-token (token)
 $ travis enable
 ```
+
+```sh
+# Создание тега с сообщением с информацией а затем вервефеируем его
+$ git tag -s v0.1.0.0
+$ git tag -v v0.1.0.0
+# Смотрим на изменения
+$ git show v0.1.0.0
+# Пушим
+$ git push origin main --tags
 ```
-## Links
-- [Book](https://www.dockerbook.com)
-- [Instructions](https://docs.docker.com/engine/reference/builder/)
+Гитхаб релиз не сразу определялся как команда, но помог туториал с сайта https://www.digitalocean.com/community/tutorials/how-to-install-go-and-set-up-a-local-programming-environment-on-ubuntu-18-04-ru
+
+а именно в файле ~/.profile
+дописать 
+
+export GOPATH=$HOME/go
+
+export PATH=$PATH:$GOPATH/bin
+
+export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
+
+Создаем и заполняем релиз
+```sh
+$ github-release --version
+$ github-release info -u ${GITHUB_USERNAME} -r lab09
+$ github-release release \
+    --user ${GITHUB_USERNAME} \
+    --repo lab09 \
+    --tag v0.1.0.0 \
+    --name "libprint" \
+    --description "my first release"
 ```
-Copyright (c) 2015-2021 The ISC Authors
+
+```sh
+# Дополнительно указываем ОС и архитектуру
+$ export PACKAGE_OS=`uname -s` PACKAGE_ARCH=`uname -m` 
+$ export PACKAGE_FILENAME=print-${PACKAGE_OS}-${PACKAGE_ARCH}.tar.gz
+$ github-release upload \
+    --user ${GITHUB_USERNAME} \
+    --repo lab09 \
+    --tag v0.1.0.0 \
+    --name "${PACKAGE_FILENAME}" \
+    --file _build/*.tar.gz
 ```
+
+```sh
+$ github-release info -u ${GITHUB_USERNAME} -r lab09
+
+#скачиваем и распаковываем наш релиз
+$ wget https://github.com/${GITHUB_USERNAME}/lab09/releases/download/v0.1.0.0/${PACKAGE_FILENAME}
+
+$ tar -ztf ${PACKAGE_FILENAME}
+
+
+mors@mors:~/morsiiik/workspace/projects/lab09$ tar -ztf ${PACKAGE_FILENAME}
+print-0.1.0.0-Linux/lib/
+print-0.1.0.0-Linux/lib/libprint.a
+print-0.1.0.0-Linux/include/
+print-0.1.0.0-Linux/include/print.hpp
+print-0.1.0.0-Linux/bin/
+print-0.1.0.0-Linux/bin/demo
+print-0.1.0.0-Linux/cmake/
+print-0.1.0.0-Linux/cmake/print-config-noconfig.cmake
+print-0.1.0.0-Linux/cmake/print-config.cmake
+
+```
+
