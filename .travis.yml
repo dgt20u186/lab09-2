@@ -4,8 +4,8 @@ language: generic
 services:
 - docker
 
-before install:
-- echo "DOCKER_PASSWORD" | docker login -u "DOCKER_USERNAME" --password-stdin
+before_install:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 script:
 - docker build -t logger .
